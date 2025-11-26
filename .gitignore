@@ -1,0 +1,11 @@
+#virtual environment files
+venv/
+
+#VS Code Settings
+.vscode/
+
+#Mac OS system file
+.DS_Store
+
+#Environment files
+.env
