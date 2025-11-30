@@ -1,1 +1,1 @@
-from .response_to_scroll import enable_scrolling
+from .response_to_scroll import ScrollEnabler
