@@ -52,4 +52,4 @@ class Home:
 
         #Create GameSetup object and bind the given method to the label
         new_game_object = GameSetup(self.root)
-        self.new_game_option.label.bind("<Button-1>", lambda event : new_game_object.layout())
+        self.new_game_option.label.bind("<Button-1>", lambda event : new_game_object.ask_name())
