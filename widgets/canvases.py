@@ -3,7 +3,7 @@ from widgets.master_widget import MasterWidget
 
 #Class to create canvas widgets
 class CanvasWidget(MasterWidget):
-    #Initialised the parameters specific to label widgets
+    #Initialised the parameters specific to canvas widgets
     def __init__(self, master, width = None, height = None, bg = None, highlightthickness = None, **kwargs):
         #Calling the __init__ method of the parent class (MasterWidget)
         super().__init__(master, **kwargs)
