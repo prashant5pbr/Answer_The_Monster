@@ -66,7 +66,7 @@ def pack_top_frame(frame):
 
     #Fetch the name of the player
     name = EnterName()
-    player_name = name.compile_word(setup=False)
+    player_name = name.compile_name(setup=False)
 
     #Display the name of the player
     LabelWidget(i_frame1.frame, text = f"Player (You):\n{player_name}", font = ("Helvetica", 30), justify = "left", 
