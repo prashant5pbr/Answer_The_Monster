@@ -46,7 +46,7 @@ class GameSetup:
         canvas = CanvasWidget(frame.frame, height = 10, width = 500, row = 0, column = 1, sticky = "nsew")
 
         #Creating a dashed line as placeholder for the name
-        dash_line = canvas.canvas.create_text(5, 55, text = "_"*30, fill = "red", font = ("Academy Engraved LET", 50), anchor="nw")
+        dash_line = canvas.canvas.create_text(5, 55, text = "_"*19, fill = "red", font = ("Academy Engraved LET", 50), anchor="nw")
         
         #Creating clickable label to create the layout
         start = LabelWidget(frame.frame, text = "Start", font = ("Academy Engraved LET", 50), fg = "red", cursor = "hand2", 
@@ -69,13 +69,14 @@ class GameSetup:
         canvas.canvas.tag_bind(dash_line, "<Leave>", on_text_leave)
         canvas.canvas.tag_bind(start, "<Leave>", on_text_leave)
 
-        #Enter name for the player
-        name = EnterName(self.root, canvas.canvas)
+        #Get name for the player
+        name_getter = EnterName(self.root, canvas.canvas)
 
         #Bind the given key press events to the root
-        self.root.bind("<Key>", lambda e : name.set_name(e, self.root))
-        self.root.bind("<Left>", lambda e : "break")
-        self.root.bind("<Right>", lambda e : "break")
+        self.root.bind("<Key>", lambda event : name_getter.set_name(event))
+        self.root.bind("<Left>", lambda event : "break")
+        self.root.bind("<Right>", lambda event : "break")
+        self.root.bind("<Return>", lambda event : name_getter.compile_name(setup = True))
 
     #Method to create layout
     def layout(self):
