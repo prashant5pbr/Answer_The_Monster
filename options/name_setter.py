@@ -98,21 +98,23 @@ class EnterName:
 
         if name:
             if setup:
-                #Lazy importing
-                from options.game_setup import GameSetup
-
-                game_setup = GameSetup(self.root)
-                game_setup.layout()
+                call_layout(self.root)
             
             else:
-                return word
+                return name
             
         else:
             if setup:
-                from options.game_setup import GameSetup
-                obj = GameSetup(self.root)
-                obj.layout()
+                call_layout(self.root)
             
             else:
-                word = "Anonymous"
-                return word
+                name = "Anonymous"
+                return name
+
+#Function to call the layout function to create game layout
+def call_layout(window):
+    #Lazy importing
+    from options.game_setup import GameSetup
+
+    game_setup = GameSetup(window)
+    game_setup.layout()
