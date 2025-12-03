@@ -19,6 +19,10 @@ class Home:
         #Clear the screen
         self.clear_screen()
 
+        for i in range(5):
+            self.root.rowconfigure(i, weight = 0)
+            self.root.columnconfigure(i, weight = 0)
+
         #Grid layout management for the root
         for i in range(3):
             self.root.rowconfigure(i, weight = 1)
