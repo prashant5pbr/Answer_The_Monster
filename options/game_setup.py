@@ -1,6 +1,6 @@
-import tkinter as tk
-from widgets import FrameWidget, LabelWidget, CanvasWidget
+from widgets import FrameWidget, LabelWidget, CanvasWidget, EntryWidget
 from options.top_frame_widges import pack_top_frame
+from options.bottom_frame_widgets import pack_bottom_frame
 from options.name_setter import EnterName
 from home_screen import Home
 
@@ -43,43 +43,40 @@ class GameSetup:
                            row = 0, column = 0, sticky = "w", pady = (50, 0))
         
         #Creating canvas
-        canvas = CanvasWidget(frame.frame, height = 10, width = 500, row = 0, column = 1, sticky = "nsew")
+        canvas = CanvasWidget(frame.frame, height = 10, width = 800, highlightthickness = 0, row = 0, column = 1, sticky = "nsew")
+
+        #Store the object of the Entername class as the attribute
+        self.name = EnterName(self.root)
+
+        #Register the validate command with the window
+        vcmd = (self.root.register(self.name.check_input), "%P")
+
+        #Create entry field that accepts player's name
+        name_field = EntryWidget(canvas.canvas, validate = "key", validatecommand = vcmd, font = ("Academy Engraved LET", 40), 
+                                 width = 22, bd = 0, highlightthickness = 0, bg = "systemWindowBackgroundColor", fg = "red", 
+                                 insertbackground = "red", selectbackground = "red")
+        
+        canvas.canvas.create_window(15, 60, window = name_field.entry, anchor = "nw")
+
+        #Assigning the entry object to the attribute of EnterName class
+        EnterName.text_object = name_field.entry
 
         #Creating a dashed line as placeholder for the name
-        dash_line = canvas.canvas.create_text(5, 55, text = "_"*19, fill = "red", font = ("Academy Engraved LET", 50), anchor="nw")
+        canvas.canvas.create_text(5, 70, text = "_"*23, fill = "red", font = ("Academy Engraved LET", 50), anchor="nw")
         
         #Creating clickable label to create the layout
         start = LabelWidget(frame.frame, text = "Start", font = ("Academy Engraved LET", 50), fg = "red", cursor = "hand2", 
                             row = 1, column = 0, sticky = "w")
         
-        #Bind the given method to the given label
+        #Bind the given method to the given label and entry object
         start.label.bind("<Button-1>", lambda event : self.layout())
-
-        #Functions to change the cursor when over canvas item
-        def on_text(event):
-            canvas.canvas.config(cursor = "hand2")
-        
-        #Functions to change the cursor when out of canvas item
-        def on_text_leave(event):
-            canvas.canvas.config(cursor = "arrow")
-
-        #Bind the given methods to the given canvas items
-        canvas.canvas.tag_bind(dash_line, "<Enter>", on_text)
-        canvas.canvas.tag_bind(start, "<Enter>", on_text)
-        canvas.canvas.tag_bind(dash_line, "<Leave>", on_text_leave)
-        canvas.canvas.tag_bind(start, "<Leave>", on_text_leave)
-
-        #Get name for the player
-        name_getter = EnterName(self.root, canvas.canvas)
-
-        #Bind the given key press events to the root
-        self.root.bind("<Key>", lambda event : name_getter.set_name(event))
-        self.root.bind("<Left>", lambda event : "break")
-        self.root.bind("<Right>", lambda event : "break")
-        self.root.bind("<Return>", lambda event : name_getter.compile_name(setup = True))
+        name_field.entry.bind("<Return>", lambda event : self.layout())
 
     #Method to create layout
     def layout(self):
+        #Fetch the name of the player
+        self.name.get_name()
+        
         #Clear the screen
         self.clear_screen()
 
@@ -106,3 +103,4 @@ class GameSetup:
 
         #Create bottom frame inside the root
         bottom_frame = FrameWidget(self.root, bg = "white", row = 2, column = 0, sticky = "nsew")
+        pack_bottom_frame(bottom_frame.frame)
