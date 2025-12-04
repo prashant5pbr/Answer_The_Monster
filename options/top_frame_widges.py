@@ -43,7 +43,7 @@ def place_canvas(frame):
     #Bind the method to update scroll region to inner_frame
     inner_frame.frame.bind("<Configure>", update_scroll_region)
 
-    return canvas, inner_frame
+    return canvas.canvas, inner_frame.frame
 
 #Function to pack widgets in game setup's top frame
 def pack_top_frame(frame):
@@ -58,22 +58,21 @@ def pack_top_frame(frame):
 
     #Creating canvas and inner frame inside the top left frame
     canvas1, i_frame1 = place_canvas(top_left_frame.frame)
-    i_frame1.frame.config(bg = "red")
+    i_frame1.config(bg = "red")
 
     #Grid layout management for the inner frame inside top left frame
     for i in range(2):
-        i_frame1.frame.rowconfigure(i, weight = 1)
+        i_frame1.rowconfigure(i, weight = 1)
 
     #Fetch the name of the player
-    name = EnterName()
-    player_name = name.compile_name(setup=False)
+    player_name = EnterName.name
 
     #Display the name of the player
-    LabelWidget(i_frame1.frame, text = f"Player (You):\n{player_name}", font = ("Helvetica", 30), justify = "left", 
+    LabelWidget(i_frame1, text = f"Player (You):\n{player_name}", font = ("Helvetica", 30), justify = "left", 
                          bg = "red", fg = "white", row = 0, column = 0, sticky = "nw")
 
     #Enable horizontal scrolling in top left frame
-    scroll_enabler = ScrollEnabler(canvas1.canvas, horizontal = True)
+    scroll_enabler = ScrollEnabler(canvas1, horizontal = True)
     scroll_enabler.enable_scrolling()
 
     #Creating top mid frame
@@ -84,19 +83,19 @@ def pack_top_frame(frame):
 
     #Creating canvas and inner frame inside the top left frame
     canvas2, i_frame2 = place_canvas(top_right_frame.frame)
-    i_frame2.frame.config(bg = "green")
+    i_frame2.config(bg = "green")
 
     #Grid layout management for the inner frame
-    i_frame2.frame.columnconfigure(0, weight = 0)
-    i_frame2.frame.columnconfigure(1, weight = 1)
+    i_frame2.columnconfigure(0, weight = 0)
+    i_frame2.columnconfigure(1, weight = 1)
 
     #Display the name of opponent (monster)
-    LabelWidget(i_frame2.frame, text = f"Player :\nMonster", font = ("Helvetica", 30), justify = "right", 
+    LabelWidget(i_frame2, text = f"Player :\nMonster", font = ("Helvetica", 30), justify = "right", 
                          bg = "green", fg = "white", row = 0, column = 1, sticky = "ne")
     
     #Update the positions of the widgets
-    canvas2.canvas.update_idletasks()
+    canvas2.update_idletasks()
     
     #Enable horizontal scrolling in top right frame
-    scroll_enabler2 = ScrollEnabler(canvas2.canvas, horizontal = True)
+    scroll_enabler2 = ScrollEnabler(canvas2, horizontal = True)
     scroll_enabler2.enable_scrolling()
