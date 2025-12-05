@@ -31,7 +31,7 @@ class EnterName:
     @staticmethod
     def get_name():
         if EnterName.text_object:
-            EnterName.name = EnterName.text_object.get()
+            EnterName.name = EnterName.text_object.get().strip()
             
             if not EnterName.name:
                 EnterName.name = "Anonymous"
