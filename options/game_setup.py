@@ -1,6 +1,6 @@
 from widgets import FrameWidget, LabelWidget, CanvasWidget, EntryWidget
-from options.top_frame_widges import pack_top_frame
-from options.bottom_frame_widgets import pack_bottom_frame
+from options.top_frame_widges import TopFramePacker
+from options.bottom_frame_widgets import BottomFramePacker
 from options.name_setter import EnterName
 from home_screen import Home
 
@@ -96,11 +96,17 @@ class GameSetup:
 
         #Create top frame inside the root
         top_frame = FrameWidget(self.root, row = 0, column = 0, sticky = "nsew")
-        pack_top_frame(top_frame.frame)                     #Place widgets in top frame
+
+        #Create object of the class TopFramePacker
+        top_packer = TopFramePacker(top_frame.frame)
+        top_packer.pack_top_frame()                             #Place widgets in top frame
 
         #Creating a separator
         FrameWidget(self.root, bg = "black", row = 1, column = 0, sticky = "nsew")
 
         #Create bottom frame inside the root
         bottom_frame = FrameWidget(self.root, bg = "white", row = 2, column = 0, sticky = "nsew")
-        pack_bottom_frame(bottom_frame.frame)
+
+        #Create object of the class TopFramePacker
+        bottom_packer = BottomFramePacker(bottom_frame.frame)
+        bottom_packer.pack_bottom_frame()                     #Place widgets in bottom frame
