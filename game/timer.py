@@ -1,0 +1,86 @@
+import tkinter as tk
+from options import BottomFramePacker
+#Lazy imported TopFramePacker class
+
+#Class to give countdown effect inside a Text widget
+class CountDown:
+    #Initialised the instance attribute with Text widget inside game layout's bottom frame
+    def __init__(self):
+        self.text_object = BottomFramePacker.text_handler
+
+    #Method to start the timer
+    def start(self):
+        #Lazy import the class TopFramePacker
+        from options import TopFramePacker
+
+        #Disable the command for each button of the game layout's botom frame
+        for button in TopFramePacker.buttons_list:
+                button.button.config(command = lambda : None) 
+        
+        #Fetch the current position of the cursor
+        pos = self.text_object.index("insert")
+
+        #Insert the given number in the current cursor position
+        self.text_object.insert(pos, 10)
+
+        #Fetch the end position of the line where the current cursor position is located
+        end_pos = self.text_object.index(f"{pos} lineend")
+
+        #Right align the text in the selected range
+        self.text_object.tag_add("right", pos, end_pos)
+        self.text_object.tag_configure("right", justify = "right")
+
+        #Call the timer method after the delay of 1000 ms (1 second)
+        self.text_object.after(1000, lambda : self.timer(10))
+
+    #Method to continue the timer
+    def timer(self, num):
+        #Make the text field editable
+        self.text_object.config(state="normal")
+
+        #Always accept new line at the bottom of the text
+        self.text_object.mark_set("insert", tk.END)
+
+        #Fetch the start and end of the line where the number will be inserted
+        line_start = self.text_object.index("insert linestart")
+        line_end = self.text_object.index("insert lineend")
+
+        #Delete the previous number
+        self.text_object.delete(line_start, line_end)
+
+        #Display time's up message
+        if num == 1:
+            #Make the text field editable
+            self.text_object.config(state="normal")
+
+            self.text_object.insert(line_start, "Time's up!!!\n")
+            self.text_object.see(tk.END)
+
+            #Right align the text in the selected range
+            self.text_object.tag_add("right", line_start, line_end)
+            self.text_object.tag_configure("right", justify = "right")
+
+            #Make the text field uneditable
+            self.text_object.config(state="disabled")
+
+            #Lazy import the TopFramePacker class
+            from options import TopFramePacker
+
+            #Enable the command for each button of the game layout's botom frame
+            for button in TopFramePacker.buttons_list:
+                button.button.config(command = TopFramePacker.buttons_commands[button.button]) 
+
+            return
+        
+        #Insert the next number
+        self.text_object.insert(line_start, num - 1)
+
+        #Right align the text in the selected range
+        self.text_object.tag_add("right", line_start, line_end)
+        self.text_object.tag_configure("right", justify = "right")
+        
+        #Recursively call the timer method after the delay of 1000 ms (1 second)
+        self.text_object.after(1000, lambda : self.timer(num - 1))
+
+        #Make the text field uneditable
+        self.text_object.config(state="disabled")
