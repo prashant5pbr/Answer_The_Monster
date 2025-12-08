@@ -1,12 +1,17 @@
 from widgets import FrameWidget, LabelWidget, ButtonWidget
 from options.bottom_frame_widgets import BottomFramePacker
 from options.name_setter import EnterName
+from options.count_click import click_tracker
 from options.put_canvas import place_canvas
 from game.play import GamePlay
 from scroll import ScrollEnabler
 
 #Class to pack widgets in the top frame of game layout
 class TopFramePacker:
+    #Defined the list of buttons and dictionary of command for each button as class attributes
+    buttons_list = []
+    buttons_commands = {}
+
     #Initialised the frame as an instance attribute
     def __init__(self, frame):
         self.frame = frame
@@ -52,13 +57,25 @@ class TopFramePacker:
 
         #Function to be called when the buttons are clicked
         def on_click(label):
+            #create the object for the class
             game_play = GamePlay(BottomFramePacker.text_handler)
-            game_play.click_reciever(label)
+
+            #Fetch the click count and random number from the given function
+            click_count, random_number = click_tracker()
+
+            #Call the method to interact with game layout's bottom frame's Text widget
+            game_play.click_reciever(label, click_count, random_number)
 
         #Creating buttons in the top mid frame
         for index, label in enumerate(["A", "B", "C"]):
-            ButtonWidget(top_mid_frame.frame, text = f"Room-{label}", font = ("Helvetica", 40), row = 0, column = index, sticky = "nsew", 
-                         command = lambda l=label : on_click(l))
+            button = ButtonWidget(top_mid_frame.frame, text = f"Room-{label}", font = ("Helvetica", 40),  
+                         command = lambda l=label : on_click(l), row = 0, column = index, sticky = "nsew")
+            
+            #Append the button to the list
+            TopFramePacker.buttons_list.append(button)
+
+            #Added the command for the button in the dictionary
+            TopFramePacker.buttons_commands[button.button] = button.button.cget("command")
 
         #Creating top right frame
         top_right_frame = FrameWidget(self.frame, borderwidth = 5, relief = "solid", row = 0, column = 2, sticky = "nsew")
