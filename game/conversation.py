@@ -6,6 +6,7 @@ import re
 
 #Create class to display interaction between the user and the system in a chat form
 class Chat:
+    #Class attribute to determine the intial stage of interaction like greeting and accepting/rejecting to play the game
     initial_response = True
 
     #Initialised the Text widget and Entry widgets as instance attributes
@@ -56,6 +57,7 @@ class Chat:
 
     #Method to invoke response on user input
     def respond(self):
+        #Return if initial_response is not True
         if not Chat.initial_response:
             #Clear the entry widget
             self.entry_object.delete(0, tk.END)
@@ -81,6 +83,7 @@ class Chat:
         if clean_response_lower in ["ok", "y", "yes", "yeah", "sure", "let's go", "start", "i want to play."]:
             text_inserter.insert_line("Great. Let's start then.")
 
+            #Stop the intial interactions
             Chat.initial_response = False
 
             #Create the object of given class
@@ -101,6 +104,7 @@ class Chat:
         elif clean_response_lower in ["later"]:
             text_inserter.insert_line("No problem. Take your time.")
 
+        #No response for empty message
         elif not clean_response_lower:
             return
 
