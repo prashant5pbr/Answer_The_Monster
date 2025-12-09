@@ -1,4 +1,5 @@
 import tkinter as tk
+#Lazy imported Questioner Class
 #Lazy imported CountDown Class
 
 #Class to proceed the conversation on positive reply from the user
@@ -6,9 +7,10 @@ class GamePlay:
     #Class attribute to determine the game has started
     game_on = False
 
-    #Initialised the Text widget as an instance attribute
-    def __init__(self, text_object):
+    #Initialised the Text widget and Entry widget as an instance attribute
+    def __init__(self, text_object, entry_object):
         self.text_object = text_object
+        self.entry_object = entry_object
 
     #Method to display initial messages if user replies positively
     def start(self):
@@ -59,6 +61,15 @@ class GamePlay:
         #Inser the message in Text widget
         if click_count == random_number:
             self.text_object.insert(pos, f"\nYou cliked on {label} : MONSTER !!!\n")
+
+            #Lazy import class Questioner
+            from game.questions_answers import Questioner
+
+            #Create object of the class
+            game_questions = Questioner()
+
+            #Insert the question in the Text widget
+            game_questions.insert_question()
 
             #Lazy import the CountDown class
             from game.timer import CountDown
