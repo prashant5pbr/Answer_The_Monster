@@ -1,15 +1,18 @@
 from widgets import FrameWidget, TextWidget, EntryWidget, ButtonWidget
 from game import Chat
+#Lazy import class Questioner
 
 #Class to pack widgets in the bottom frame of game layout
 class BottomFramePacker:
-    #Class attribute to store the Text widget and to be accessed through other class
+    #Class attribute to store the Text widget and Entry widget and to be accessed through other class
     text_handler = None
+    entry_handler = None
 
     #Initialised the frame and Text widget as an instance attribute
     def __init__(self, frame):
         self.frame = frame
         self.text_object = None
+        self.entry_object = None
 
     #Method to place widgets in the bottom frame
     def pack_bottom_frame(self):
@@ -50,21 +53,35 @@ class BottomFramePacker:
         input_frame.frame.columnconfigure(1, weight=0)
 
         #Creating entry widget in the input frame
-        entry = EntryWidget(input_frame.frame, width = 57, font = ("Helvetica", 20), bd = 0, highlightthickness = 1, 
+        self.entry_object = EntryWidget(input_frame.frame, width = 57, font = ("Helvetica", 20), bd = 0, highlightthickness = 1, 
                             row = 0, column = 0, sticky = "nsew")
+        
+        #Assigning Text widget to the class attribute
+        BottomFramePacker.entry_handler = self.entry_object.entry
     
         #Creating object of the class Chat to start conversation
-        talk = Chat(self.text_object.text, entry.entry)
+        talk = Chat(self.text_object.text, self.entry_object.entry)
         talk.start()
 
         #Making text uneditable
         self.text_object.text.config(state = "disabled")
+
+        def submit_enter():
+            #Lazy import the class Questioner
+            from game.questions_answers import Questioner
+
+            #Create object of the class and insert the user replied answer in the Text widget
+            if Questioner.answer_ready:
+                games_answer = Questioner()
+                games_answer.insert_answer()
+
+            talk.respond()
         
         #Create button widget in the input frame
         ButtonWidget(input_frame.frame, text = "Enter", font = ("Helvetica", 30), borderwidth = 0, highlightthickness = 0,
-                              command = talk.respond, row = 0, column = 1)
+                              command = submit_enter, row = 0, column = 1)
         
-        entry.entry.bind("<Return>", lambda event : talk.respond())
+        self.entry_object.entry.bind("<Return>", lambda event : submit_enter())
 
         #Creating top right frame
         bottom_right_frame = FrameWidget(self.frame, borderwidth = 5, relief = "solid", row = 0, column = 2, sticky = "nsew")
