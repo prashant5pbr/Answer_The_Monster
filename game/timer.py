@@ -4,12 +4,21 @@ from options import BottomFramePacker
 
 #Class to give countdown effect inside a Text widget
 class CountDown:
+    #Class attributes to determine if the timer has been stopped and if the time is up
+    stop_timer = False
+    time_up = False
+
     #Initialised the instance attribute with Text widget inside game layout's bottom frame
     def __init__(self):
         self.text_object = BottomFramePacker.text_handler
+        self.entry_object = BottomFramePacker.entry_handler
 
     #Method to start the timer
     def start(self):
+        #Reset the flags everytime the timer starts
+        CountDown.stop_timer = False
+        CountDown.time_up = False
+
         #Lazy import the class TopFramePacker
         from options import TopFramePacker
 
@@ -35,6 +44,10 @@ class CountDown:
 
     #Method to continue the timer
     def timer(self, num):
+        #Return if the timer has stopped
+        if CountDown.stop_timer:
+            return
+        
         #Make the text field editable
         self.text_object.config(state="normal")
 
@@ -50,15 +63,28 @@ class CountDown:
 
         #Display time's up message
         if num == 1:
+            #Change the state of the flags
+            CountDown.stop_timer = True
+            CountDown.time_up = True
+
             #Make the text field editable
             self.text_object.config(state="normal")
 
-            self.text_object.insert(line_start, "Time's up!!!\n")
+            #Insert the time up message in the Text widget
+            self.text_object.insert(line_start, "Time's up ⏰!!!\n")
+
+            #Scroll the view to the end of the Text widget
             self.text_object.see(tk.END)
 
             #Right align the text in the selected range
             self.text_object.tag_add("right", line_start, line_end)
             self.text_object.tag_configure("right", justify = "right")
+
+            #Insert the message
+            self.text_object.insert(f"{line_start} + 1 line", "\n❌ You could not answer in time.\n")
+
+            #Scroll the view to the end of the Text widget
+            self.text_object.see(tk.END)
 
             #Make the text field uneditable
             self.text_object.config(state="disabled")
