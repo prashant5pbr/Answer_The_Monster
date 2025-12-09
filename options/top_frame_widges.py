@@ -3,7 +3,7 @@ from options.bottom_frame_widgets import BottomFramePacker
 from options.name_setter import EnterName
 from options.count_click import click_tracker
 from options.put_canvas import place_canvas
-from game.play import GamePlay
+from game import GamePlay
 from scroll import ScrollEnabler
 
 #Class to pack widgets in the top frame of game layout
@@ -58,7 +58,7 @@ class TopFramePacker:
         #Function to be called when the buttons are clicked
         def on_click(label):
             #create the object for the class
-            game_play = GamePlay(BottomFramePacker.text_handler)
+            game_play = GamePlay(BottomFramePacker.text_handler, BottomFramePacker.entry_handler)
 
             #Fetch the click count and random number from the given function
             click_count, random_number = click_tracker()
