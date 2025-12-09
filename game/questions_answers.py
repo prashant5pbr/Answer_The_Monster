@@ -1,0 +1,109 @@
+import random
+import tkinter as tk
+from options import BottomFramePacker
+from options import TopFramePacker
+from game.timer import CountDown
+from game.all_questions import questions_data
+
+#Class to insert questions and answers in the Text widget
+class Questioner:
+    #Class attributes
+    questions = None
+    current_question = None
+    current_answer = None
+    answer_ready = False
+
+    #Initialised the instance attribute with Text widget and Entry widget inside game layout's bottom frame
+    def __init__(self):
+        self.text_object = BottomFramePacker.text_handler
+        self.entry_object = BottomFramePacker.entry_handler
+
+    #Method to selected questions to be asked
+    def ask_questions(self):
+        if Questioner.questions is None:
+            Questioner.questions = questions_data
+
+        #Create a list of questions only
+        questions_list = list(Questioner.questions)
+        
+        #Randomly fetch a question
+        Questioner.current_question = random.choice(questions_list)
+
+        #Fetch the answer of the selected questions
+        Questioner.current_answer = Questioner.questions[Questioner.current_question]
+
+        #Delete the question from the dataset
+        del Questioner.questions[Questioner.current_question]
+
+    #Method to insert questions in the Text widget
+    def insert_question(self):
+        #Call the method to ask questions
+        self.ask_questions()
+
+        #Fetch the randomly selected question
+        selected_question = Questioner.current_question
+
+        #Always accept new line at the bottom of the text
+        self.text_object.mark_set("insert", tk.END)
+
+        #Fetch the cursor position to insert the line
+        pos = self.text_object.index("insert")
+
+        #Insert the question in the Text widget
+        self.text_object.insert(pos, f"What's {selected_question.lower()}?\n")
+
+        #Fetch the end of the line where the output is inserted
+        end_pos = self.text_object.index(f"{pos} lineend")
+
+        #Right align the output by apply tag
+        self.text_object.tag_add("right", pos, end_pos)
+        self.text_object.tag_configure("right", justify = "right")
+
+        #Ready to fetch and insert the answer
+        Questioner.answer_ready = True
+
+    #Method to insert answers in the Text widget
+    def insert_answer(self):
+        #Fetch the response from the Entry widget
+        response = self.entry_object.get().lower().strip()
+
+        #Make the Text widget editable
+        self.text_object.config(state = "normal")
+
+        #Always accept new line at the bottom of the text
+        self.text_object.mark_set("insert", tk.END)
+
+        #Fetch the cursor position to insert the line
+        pos = self.text_object.index("insert linestart")
+
+        #Delete the content of the given line
+        self.text_object.delete(pos, f"{pos} lineend")
+        
+        #No reply to input message
+        if not response:
+            return
+        
+        #Message for correct answer
+        elif response == Questioner.current_answer:
+            CountDown.stop_timer = True
+            CountDown.time_up = False
+            message = f"You entered : {response}.\n✅ That's correct."
+
+        #Message for incorrect answer
+        else:
+            CountDown.stop_timer = True
+            CountDown.time_up = False
+            message = f"You entered : {response}.\n❌ That's incorrect."
+
+        #Insert the message in the Text widget
+        self.text_object.insert(self.text_object.index("insert"), f"\n{message}\n")
+
+        #Scroll the view to the end of the Text widget
+        self.text_object.see(tk.END)
+
+        #Make the text widfet uneditable
+        self.text_object.config(state = "disabled")
+
+        #Enable the command for each button of the game layout's botom frame
+        for button in TopFramePacker.buttons_list:
+            button.button.config(command = TopFramePacker.buttons_commands[button.button])
