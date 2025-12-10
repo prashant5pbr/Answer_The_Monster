@@ -1,6 +1,6 @@
 import tkinter as tk
-from options import BottomFramePacker
-#Lazy imported TopFramePacker class
+from game.create_character import Character
+#Lazy imported classes TopFramePacker, BottomFramePacker and Tables
 
 #Class to give countdown effect inside a Text widget
 class CountDown:
@@ -10,6 +10,9 @@ class CountDown:
 
     #Initialised the instance attribute with Text widget inside game layout's bottom frame
     def __init__(self):
+        #Lazy import the class BottomFramePacker
+        from options import BottomFramePacker
+
         self.text_object = BottomFramePacker.text_handler
         self.entry_object = BottomFramePacker.entry_handler
 
@@ -81,16 +84,26 @@ class CountDown:
             self.text_object.tag_configure("right", justify = "right")
 
             #Insert the message
-            self.text_object.insert(f"{line_start} + 1 line", "\n❌ You could not answer in time.\n")
+            self.text_object.insert(f"{line_start} + 1 line", "\n❌ You could not answer in time.\nMonster gains your 5 points.\n")
+
+            #Update the labels displaying points
+            Character.player_handler.adjust_points(answer = "incorrect")
+
+            #Lazy import the classes TopFramePacker and Tables
+            from options import TopFramePacker, Tables
+
+            #Update the labels displaying the points
+            TopFramePacker.player_points.config(text = f"Current Points :\n{Character.player_handler.points}")
+            TopFramePacker.monster_points.config(text = f"Current Points :\n{Character.system_points}")
+
+            #Update the tables
+            Tables.manage(answer = "incorrect")
 
             #Scroll the view to the end of the Text widget
             self.text_object.see(tk.END)
 
             #Make the text field uneditable
             self.text_object.config(state="disabled")
-
-            #Lazy import the TopFramePacker class
-            from options import TopFramePacker
 
             #Enable the command for each button of the game layout's botom frame
             for button in TopFramePacker.buttons_list:
