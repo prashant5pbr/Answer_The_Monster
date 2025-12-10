@@ -3,14 +3,16 @@ from options.bottom_frame_widgets import BottomFramePacker
 from options.name_setter import EnterName
 from options.count_click import click_tracker
 from options.put_canvas import place_canvas
-from game import GamePlay
+from game import GamePlay, Character
 from scroll import ScrollEnabler
 
 #Class to pack widgets in the top frame of game layout
 class TopFramePacker:
-    #Defined the list of buttons and dictionary of command for each button as class attributes
+    #Defined the clas attributes
     buttons_list = []
     buttons_commands = {}
+    player_points = None                #Attribute to store reference to the label displaying player's points
+    monster_points = None               #Attribute to store reference to the label displaying monster's points
 
     #Initialised the frame as an instance attribute
     def __init__(self, frame):
@@ -36,11 +38,19 @@ class TopFramePacker:
             i_frame1.rowconfigure(i, weight = 1)
 
         #Fetch the name of the player
-        player_name = EnterName.name
+        player = Character(EnterName.name)
+        player_name = player.name
 
         #Display the name of the player
         LabelWidget(i_frame1, text = f"Player (You):\n{player_name}", font = ("Helvetica", 30), justify = "left", 
                             bg = "red", fg = "white", row = 0, column = 0, sticky = "nw")
+        
+        #Display the points of the player
+        player_points_label = LabelWidget(i_frame1, text = f"Current Points :\n{player.points}", font = ("Helvetica", 30), 
+                                    justify = "left", bg = "red", fg = "white", row = 1, column = 0, sticky = "nw")
+        
+        #Assign the label to display the points of player as class attribute
+        TopFramePacker.player_points = player_points_label.label
 
         #Enable horizontal scrolling in top left frame
         left_scroll_enabler = ScrollEnabler(canvas1, horizontal = True)
@@ -85,12 +95,20 @@ class TopFramePacker:
         i_frame2.config(bg = "green")
 
         #Grid layout management for the inner frame
-        i_frame2.columnconfigure(0, weight = 0)
-        i_frame2.columnconfigure(1, weight = 1)
+        for i in range(2):
+            i_frame2.rowconfigure(i, weight = 1)
+            i_frame2.columnconfigure(i, weight = 1)
 
         #Display the name of opponent (monster)
-        LabelWidget(i_frame2, text = f"Player :\nMonster", font = ("Helvetica", 30), justify = "right", 
+        LabelWidget(i_frame2, text = f"Player :\n{Character.system_name}", font = ("Helvetica", 30), justify = "right", 
                             bg = "green", fg = "white", row = 0, column = 1, sticky = "ne")
+        
+        #Display the points of the player
+        monster_points_label = LabelWidget(i_frame2, text = f"Current Points :\n{Character.system_points}", font = ("Helvetica", 30), 
+                                     justify = "right", bg = "green", fg = "white", row = 1, column = 1, sticky = "ne")
+        
+        #Assign the label to display the points of monster as class attribute
+        TopFramePacker.monster_points = monster_points_label.label
         
         #Update the positions of the widgets
         canvas2.update_idletasks()
