@@ -5,3 +5,4 @@ from .frames import FrameWidget
 from .canvases import CanvasWidget
 from .entry_fields import EntryWidget
 from .text_fields import TextWidget
+from .tree_views import TreeViewWidget
