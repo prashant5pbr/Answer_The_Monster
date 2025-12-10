@@ -1,4 +1,5 @@
 from widgets import FrameWidget, TextWidget, EntryWidget, ButtonWidget
+from options.manage_tables import Tables
 from game import Chat
 #Lazy import class Questioner
 
@@ -24,6 +25,10 @@ class BottomFramePacker:
 
         #Creating top left frame
         bottom_left_frame = FrameWidget(self.frame, borderwidth = 5, relief = "solid", row = 0, column = 0, sticky = "nsew")
+
+        #Create table in the bottom left frame
+        left_table = Tables(bottom_left_frame.frame)
+        left_table.create()
 
         #Creating top mid frame
         bottom_mid_frame = FrameWidget(self.frame, borderwidth = 5,  relief = "solid", row = 0, column = 1, sticky = "nsew")
@@ -66,6 +71,7 @@ class BottomFramePacker:
         #Making text uneditable
         self.text_object.text.config(state = "disabled")
 
+        #Method to be called when enter button is clicked
         def submit_enter():
             #Lazy import the class Questioner
             from game.questions_answers import Questioner
@@ -85,3 +91,7 @@ class BottomFramePacker:
 
         #Creating top right frame
         bottom_right_frame = FrameWidget(self.frame, borderwidth = 5, relief = "solid", row = 0, column = 2, sticky = "nsew")
+
+        #Create table in the bottom right frame
+        right_table = Tables(bottom_right_frame.frame)
+        right_table.create()
