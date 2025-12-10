@@ -1,20 +1,24 @@
 import random
 import tkinter as tk
-from options import BottomFramePacker
-from options import TopFramePacker
+from game.create_character import Character
 from game.timer import CountDown
 from game.all_questions import questions_data
+#lazy import class TopFramePacker, BottomFramePacker and Tables
 
 #Class to insert questions and answers in the Text widget
 class Questioner:
     #Class attributes
     questions = None
+    question_number = 0
     current_question = None
     current_answer = None
     answer_ready = False
 
     #Initialised the instance attribute with Text widget and Entry widget inside game layout's bottom frame
     def __init__(self):
+        #Lazy import class BottomFramePacker
+        from options import BottomFramePacker
+
         self.text_object = BottomFramePacker.text_handler
         self.entry_object = BottomFramePacker.entry_handler
 
@@ -39,6 +43,9 @@ class Questioner:
     def insert_question(self):
         #Call the method to ask questions
         self.ask_questions()
+
+        #Update the question number
+        Questioner.question_number += 1
 
         #Fetch the randomly selected question
         selected_question = Questioner.current_question
@@ -78,6 +85,9 @@ class Questioner:
 
         #Delete the content of the given line
         self.text_object.delete(pos, f"{pos} lineend")
+
+        #Lazy import class TopFramePacker and Tables
+        from options import TopFramePacker, Tables
         
         #No reply to input message
         if not response:
@@ -85,15 +95,41 @@ class Questioner:
         
         #Message for correct answer
         elif response == Questioner.current_answer:
+            #Update the flags
             CountDown.stop_timer = True
             CountDown.time_up = False
-            message = f"You entered : {response}.\n✅ That's correct."
+
+            #Update the points of the player and the monster
+            Character.player_handler.adjust_points(answer = "correct")
+
+            #Update the labels displaying the points
+            TopFramePacker.player_points.config(text = f"Current Points :\n{Character.player_handler.points}")
+            TopFramePacker.monster_points.config(text = f"Current Points :\n{Character.system_points}")
+
+            #Message to be inserted
+            message = f"You entered : {response}.\n✅ That's correct.\nYou gain Monster's 5 points."
+
+            #Update the tables
+            Tables.manage(answer="correct")
 
         #Message for incorrect answer
         else:
+            #Update the flags
             CountDown.stop_timer = True
             CountDown.time_up = False
-            message = f"You entered : {response}.\n❌ That's incorrect."
+
+            #Update the points of the player and the monster
+            Character.player_handler.adjust_points(answer = "incorrect")
+
+            #Update the labels displaying the points
+            TopFramePacker.player_points.config(text = f"Current Points :\n{Character.player_handler.points}")
+            TopFramePacker.monster_points.config(text = f"Current Points :\n{Character.system_points}")
+
+            #Message to be inserted
+            message = f"You entered : {response}.\n❌ That's incorrect.\nMonster gains your 5 points."
+
+            #Update the tables
+            Tables.manage(answer="incorrect")
 
         #Insert the message in the Text widget
         self.text_object.insert(self.text_object.index("insert"), f"\n{message}\n")
