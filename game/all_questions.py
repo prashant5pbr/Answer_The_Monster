@@ -34,7 +34,7 @@ questions_data = {
     "The pandas method to access the values by labels" : "loc()",
     "The pandas method to reset the index of a data frame" : "reset_index()",
     "The pandas method to combine two dataframes" : "merge()",
-    "The pandas method to convert a column into datetime format" : "to_dateime()",
+    "The pandas method to convert a column into datetime format" : "to_datetime()",
     "The python library used for interacting with databases" : "sqlite3",
     "The sqlite3 keyword to combine rows from two or more tables" : "join",
     "The sqlite3 keyword to skip a given number of rows" : "offset",
