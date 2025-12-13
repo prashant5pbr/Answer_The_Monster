@@ -1,9 +1,10 @@
 import random
+import copy
 import tkinter as tk
 from game.create_character import Character
 from game.timer import CountDown
 from game.all_questions import questions_data
-#lazy import class TopFramePacker, BottomFramePacker and Tables
+#Lazy import classes Gameplayy, TopFramePacker, BottomFramePacker and Tables
 
 #Class to insert questions and answers in the Text widget
 class Questioner:
@@ -13,6 +14,7 @@ class Questioner:
     current_question = None
     current_answer = None
     answer_ready = False
+    reset_questions = False
 
     #Initialised the instance attribute with Text widget and Entry widget inside game layout's bottom frame
     def __init__(self):
@@ -24,8 +26,8 @@ class Questioner:
 
     #Method to selected questions to be asked
     def ask_questions(self):
-        if Questioner.questions is None:
-            Questioner.questions = questions_data
+        if Questioner.questions is None or Questioner.reset_questions:
+            Questioner.questions = copy.deepcopy(questions_data)
 
         #Create a list of questions only
         questions_list = list(Questioner.questions)
@@ -38,6 +40,9 @@ class Questioner:
 
         #Delete the question from the dataset
         del Questioner.questions[Questioner.current_question]
+
+        #Reset the flag to False
+        Questioner.reset_questions = False
 
     #Method to insert questions in the Text widget
     def insert_question(self):
@@ -93,6 +98,12 @@ class Questioner:
         if not response:
             return
         
+        #Return if the time is up
+        if CountDown.time_up:
+            #Don't accept the answer after time is up
+            Questioner.answer_ready = False
+            return
+        
         #Message for correct answer
         elif response == Questioner.current_answer:
             #Update the flags
@@ -111,6 +122,9 @@ class Questioner:
 
             #Update the tables
             Tables.manage(answer="correct")
+
+            #Don't accept the answer after time is up
+            Questioner.answer_ready = False
 
         #Message for incorrect answer
         else:
@@ -131,11 +145,20 @@ class Questioner:
             #Update the tables
             Tables.manage(answer="incorrect")
 
+            #Don't accept the answer after time is up
+            Questioner.answer_ready = False
+
         #Insert the message in the Text widget
         self.text_object.insert(self.text_object.index("insert"), f"\n{message}\n")
 
+        #Check if any character's points has become zero
+        Character.check_points()
+
         #Scroll the view to the end of the Text widget
         self.text_object.see(tk.END)
+
+        #Delete the content of the given line
+        self.entry_object.delete(0, tk.END)
 
         #Make the text widfet uneditable
         self.text_object.config(state = "disabled")
