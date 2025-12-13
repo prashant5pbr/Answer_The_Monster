@@ -1,4 +1,5 @@
 from widgets import LabelWidget, FrameWidget
+#Lazy imported class GameSetup
 
 #Class to creat home screen
 class Home:
@@ -19,9 +20,13 @@ class Home:
         #Clear the screen
         self.clear_screen()
 
+        #Reset the grid layout
         for i in range(5):
             self.root.rowconfigure(i, weight = 0)
             self.root.columnconfigure(i, weight = 0)
+
+        self.root.rowconfigure(0, minsize = 0)
+        self.root.rowconfigure(1, minsize = 0)
 
         #Grid layout management for the root
         for i in range(3):
