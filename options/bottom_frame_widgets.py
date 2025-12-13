@@ -1,6 +1,7 @@
+import tkinter as tk
 from widgets import FrameWidget, TextWidget, EntryWidget, ButtonWidget
 from options.manage_tables import Tables
-from game import Chat
+from game import Chat, GamePlay
 #Lazy import class Questioner
 
 #Class to pack widgets in the bottom frame of game layout
@@ -80,8 +81,20 @@ class BottomFramePacker:
             if Questioner.answer_ready:
                 games_answer = Questioner()
                 games_answer.insert_answer()
+            
+            #Create object of the class and call the method to restart the game or go to home
+            elif GamePlay.should_restart_game:
+                #Create the object of given class
+                game_play = GamePlay(BottomFramePacker.text_handler, BottomFramePacker.entry_handler)
+                game_play.end_options()
 
-            talk.respond()
+            #Method for interaction before the game starts
+            elif Chat.initial_response:
+                talk.respond()
+
+            else:
+                BottomFramePacker.entry_handler.delete(0, tk.END)
+                return
         
         #Create button widget in the input frame
         ButtonWidget(input_frame.frame, text = "Enter", font = ("Helvetica", 30), borderwidth = 0, highlightthickness = 0,
