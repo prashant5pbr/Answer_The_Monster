@@ -74,3 +74,7 @@ class Tables:
         #Insert the data in the given tables
         player_table.insert("", "end", values = (q_no, p_point, p_updated_point))
         monster_table.insert("", "end", values = (q_no, m_point, m_updated_point))
+
+        #Scroll the view to the end of the tables
+        player_table.yview_moveto(1)
+        monster_table.yview_moveto(1)
