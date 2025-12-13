@@ -1,4 +1,6 @@
-#Class to create characters
+#Lazy import classes GamePlay and BottomFramePacker
+
+#Class to create and manage characters
 class Character:
     #Defining system's name, initial points and the reference to the player as class attributes 
     system_name = "Monster"
@@ -20,3 +22,26 @@ class Character:
         elif answer.lower() == "incorrect":
             self.points -= 5
             Character.system_points += 5
+
+    #Method to check if the game has ended when any of the character's points become zero
+    @staticmethod
+    def check_points():
+        #Lazy import the classes GamePlay and BottomFramePacker
+        from game.play import GamePlay
+        from options import BottomFramePacker
+
+        #Check if system's point first became zero
+        if Character.system_points == 0:
+            status = "win 💪"
+
+            #Create object and call method to insert last messages in the Text widget
+            last_message_inserter = GamePlay(BottomFramePacker.text_handler, BottomFramePacker.entry_handler)
+            last_message_inserter.game_end(status)
+
+        #Check if system's point first became zero
+        elif Character.player_handler.points == 0:
+            status = "lose"
+
+            #Create object and call method to insert last messages in the Text widget
+            last_message_inserter = GamePlay(BottomFramePacker.text_handler, BottomFramePacker.entry_handler)
+            last_message_inserter.game_end(status)
