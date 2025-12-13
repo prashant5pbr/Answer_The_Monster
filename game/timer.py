@@ -1,6 +1,6 @@
 import tkinter as tk
 from game.create_character import Character
-#Lazy imported classes TopFramePacker, BottomFramePacker and Tables
+#Lazy imported classes TopFramePacker, BottomFramePacker, Questioner and Tables
 
 #Class to give countdown effect inside a Text widget
 class CountDown:
@@ -89,9 +89,6 @@ class CountDown:
             #Update the labels displaying points
             Character.player_handler.adjust_points(answer = "incorrect")
 
-            #Check if any of the character's point has become zero
-            Character.check_points()
-
             #Lazy import the classes TopFramePacker and Tables
             from options import TopFramePacker, Tables
 
@@ -101,6 +98,14 @@ class CountDown:
 
             #Update the tables
             Tables.manage(answer = "incorrect")
+
+            #Check if any of the character's point has become zero
+            Character.check_points()
+
+            from game.questions_answers import Questioner
+
+            #Turn off the flag to False
+            Questioner.answer_ready = False
 
             #Scroll the view to the end of the Text widget
             self.text_object.see(tk.END)
