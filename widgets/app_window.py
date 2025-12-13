@@ -2,6 +2,9 @@ import tkinter as tk
 
 #Class to create window
 class AppWindow:
+    #Class attribute to store the reference of the root
+    main_window = None
+
     #Initialised the width, height and title for window
     def __init__(self, width, height, title):
         self.root = tk.Tk()              #Create the window as an attribute for object of the class
@@ -9,6 +12,9 @@ class AppWindow:
         self.width = width
         self.height = height
         self.title = title
+
+        #Assign the Tk() object to the window handler
+        AppWindow.main_window = self.root
 
     #Setting the dimensions and title of the window
     def setup_window(self):
