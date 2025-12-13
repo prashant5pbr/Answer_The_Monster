@@ -27,7 +27,7 @@ class CountDown:
 
         #Disable the command for each button of the game layout's botom frame
         for button in TopFramePacker.buttons_list:
-                button.button.config(command = lambda : None) 
+            button.button.config(command = lambda : None)
         
         #Fetch the current position of the cursor
         pos = self.text_object.index("insert")
@@ -88,6 +88,9 @@ class CountDown:
 
             #Update the labels displaying points
             Character.player_handler.adjust_points(answer = "incorrect")
+
+            #Check if any of the character's point has become zero
+            Character.check_points()
 
             #Lazy import the classes TopFramePacker and Tables
             from options import TopFramePacker, Tables
