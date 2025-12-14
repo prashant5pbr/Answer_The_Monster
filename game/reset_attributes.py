@@ -1,3 +1,4 @@
+import time
 from game.create_character import Character
 from game.play import GamePlay
 from game.timer import CountDown
@@ -13,9 +14,11 @@ def reset():
 
     Questioner.answer_ready = False
     Questioner.question_number = 0
+    Questioner.correct_answers = 0
     Questioner.reset_questions = True
 
     CountDown.stop_timer = False
 
+    GamePlay.start_time = time.time()
     GamePlay.game_on = False
     GamePlay.should_restart_game = False
