@@ -1,5 +1,6 @@
 from widgets import LabelWidget, FrameWidget
 #Lazy imported class GameSetup and ScoreBoard
+#Lazy imported the function exit_game() from end_game.py
 
 #Class to creat home screen
 class Home:
@@ -66,4 +67,10 @@ class Home:
 
         #Create ScoreBoard object and bind the method to the label
         score_object = ScoreBoard(self.root)
-        self.scores_option.label.bind("<Button-1>", lambda event: score_object.display_scores())
+        self.scores_option.label.bind("<Button-1>", lambda event : score_object.display_scores())
+
+        #Lazy import the function exit_game
+        from game import exit_game
+
+        #Bind the method to exit the game
+        self.exit_option.label.bind("<Button-1>", lambda event : exit_game())
