@@ -45,11 +45,11 @@ class ScoreBoard:
         #Style configuration for the table and its heading
         style = ttk.Style()
 
-        style.configure("Treeview", rowheight = 50, font = ("Academy Engraved LET", 20), 
+        style.configure("Treeview", rowheight = 50, font = ("Academy Engraved LET", 25), 
                         background = "systemWindowBackgroundColor", fieldbackground = "systemWindowBackgroundColor", 
                          foreground = "red")
         
-        style.configure("Treeview.Heading", font = ("Academy Engraved LET", 35), foreground = "red", 
+        style.configure("Treeview.Heading", font = ("Academy Engraved LET", 40), foreground = "red", 
                         background = "systemWindowBackgroundColor")
         
         #Create a table
@@ -75,7 +75,7 @@ class ScoreBoard:
                 #Create header row for the table
                 for i, j in zip(columns_place, columns_names):
                     score_table.tree.heading(i, text = j)
-                    score_table.tree.column(i, anchor="center", width = 250)
+                    score_table.tree.column(i, anchor="center", width = 50)
 
                 #Fetch the data
                 cursor.execute("select * from game_records")
