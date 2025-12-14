@@ -1,16 +1,21 @@
+from datetime import datetime
 import time
 import tkinter as tk
 from home_screen import Home
 from widgets import AppWindow
 #Lazy imported classes TopFramePacker, Character, Questioner, Chat, Tables and Countdown
 #Lazy import the function reset() from reset_attributes.py
+#Lazy import the function save_data() from save_to_database.py
 
 #Class to proceed the conversation on positive reply from the user
 class GamePlay:
     #Class attributes
     game_on = False
     should_restart_game = False
+    start_date = None
     start_time = None
+    duration = None
+    score = None
 
     #Initialised the Text widget and Entry widget as an instance attribute
     def __init__(self, text_object, entry_object):
@@ -46,8 +51,9 @@ class GamePlay:
             self.text_object.tag_add("right", current_pos, end_pos)
             self.text_object.tag_configure("right", justify = "right")
 
-        #Set the timer and change the value of the flag to True
-        GamePlay.start_time = time.time()
+        #Set the date and start time and change the value of the flag to True
+        GamePlay.start_date = datetime.now()
+        GamePlay.start_time = datetime.now()
         GamePlay.game_on = True
 
     #Method to be called when the game layout's top frame's buttons are clicked
@@ -105,16 +111,24 @@ class GamePlay:
 
     #Method to insert the last messages at the end of the game
     def game_end(self, status):
-        #Calculate the duration of the game and convert it in HH:MM:SS format
-        duration = time.time() - GamePlay.start_time
-        duration = time.strftime("%H:%M:%S", time.gmtime(duration))
+        #Set the display format for start date
+        GamePlay.start_date = GamePlay.start_date.strftime("%Y/%m/%d")
+
+        #Calculate the duration of the game
+        GamePlay.duration = datetime.now() - GamePlay.start_time
+
+        #Set the display format for start time
+        GamePlay.start_time = GamePlay.start_time.strftime("%H:%M:%S")
+
+        #Set the duration in HH:MM:SS format
+        GamePlay.duration = time.strftime("%H:%M:%S", time.gmtime(GamePlay.duration.total_seconds()))
 
         #Lazy import the class Questioner
         from game.questions_answers import Questioner
 
         #Calculate the score
-        score = (Questioner.correct_answers / Questioner.question_number) * 100
-        score = f"{score:.3f}"
+        GamePlay.score = (Questioner.correct_answers / Questioner.question_number) * 100
+        GamePlay.score = f"{GamePlay.score:.3f}"
 
         #Insert the messages in the Text widget
         self.text_object.insert(self.text_object.index("insert"), "\n\n")
@@ -122,14 +136,26 @@ class GamePlay:
         self.text_object.insert(self.text_object.index("insert"), "END OF GAME")
         self.text_object.insert(self.text_object.index("insert"), "-"*37)
         
-        self.text_object.insert(self.text_object.index("insert"), f"\nYou {status}")
-        self.text_object.insert(self.text_object.index("insert"), f"\nScore : {score}")
-        self.text_object.insert(self.text_object.index("insert"), f"\nDuration : {duration}")
+        #Lazy import class Character
+        from game import Character
+
+        #Insert stats into the Text widget
+        if Character.status == "win":
+            self.text_object.insert(self.text_object.index("insert"), f"\nYou {status} 💪")
+        else:
+            self.text_object.insert(self.text_object.index("insert"), f"\nYou {status} 😞")
+
+        self.text_object.insert(self.text_object.index("insert"), f"\nScore : {GamePlay.score}")
+        self.text_object.insert(self.text_object.index("insert"), f"\nDuration : {GamePlay.duration}")
 
         self.text_object.insert(self.text_object.index("insert"), f"\n\nType Restart(R) to restart the game or Home(H) to go to home screen.")
 
         #Make the text field uneditable
         self.text_object.config(state = "disabled")
+
+        #Save the data into the database
+        from game.save_to_database import save_data
+        save_data()
 
         #Flag to indicate the end of the game
         GamePlay.game_on = False
