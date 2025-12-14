@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 from game.create_character import Character
 from game.play import GamePlay
 from game.timer import CountDown
@@ -8,6 +8,7 @@ from game.timer import CountDown
 def reset():
     Character.system_points = 50
     Character.player_handler.points = 50
+    Character.status = None
 
     #Lazy import class Questioner
     from game.questions_answers import Questioner
@@ -19,6 +20,9 @@ def reset():
 
     CountDown.stop_timer = False
 
-    GamePlay.start_time = time.time()
+    GamePlay.start_date = datetime.now()
+    GamePlay.start_time = datetime.now()
+    GamePlay.duration = None
+    GamePlay.score = None
     GamePlay.game_on = False
     GamePlay.should_restart_game = False
