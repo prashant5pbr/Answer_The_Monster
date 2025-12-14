@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from home_screen import Home
 from widgets import AppWindow
@@ -9,6 +10,7 @@ class GamePlay:
     #Class attributes
     game_on = False
     should_restart_game = False
+    start_time = None
 
     #Initialised the Text widget and Entry widget as an instance attribute
     def __init__(self, text_object, entry_object):
@@ -44,7 +46,8 @@ class GamePlay:
             self.text_object.tag_add("right", current_pos, end_pos)
             self.text_object.tag_configure("right", justify = "right")
 
-        #Change the value of the flag to True
+        #Set the timer and change the value of the flag to True
+        GamePlay.start_time = time.time()
         GamePlay.game_on = True
 
     #Method to be called when the game layout's top frame's buttons are clicked
@@ -102,13 +105,26 @@ class GamePlay:
 
     #Method to insert the last messages at the end of the game
     def game_end(self, status):
+        #Calculate the duration of the game and convert it in HH:MM:SS format
+        duration = time.time() - GamePlay.start_time
+        duration = time.strftime("%H:%M:%S", time.gmtime(duration))
+
+        #Lazy import the class Questioner
+        from game.questions_answers import Questioner
+
+        #Calculate the score
+        score = (Questioner.correct_answers / Questioner.question_number) * 100
+        score = f"{score:.3f}"
+
         #Insert the messages in the Text widget
         self.text_object.insert(self.text_object.index("insert"), "\n\n")
         self.text_object.insert(self.text_object.index("insert"), "-"*37)
         self.text_object.insert(self.text_object.index("insert"), "END OF GAME")
         self.text_object.insert(self.text_object.index("insert"), "-"*37)
         
-        self.text_object.insert(self.text_object.index("insert"), f"\nYou {status}.")
+        self.text_object.insert(self.text_object.index("insert"), f"\nYou {status}")
+        self.text_object.insert(self.text_object.index("insert"), f"\nScore : {score}")
+        self.text_object.insert(self.text_object.index("insert"), f"\nDuration : {duration}")
 
         self.text_object.insert(self.text_object.index("insert"), f"\n\nType Restart(R) to restart the game or Home(H) to go to home screen.")
 
@@ -159,15 +175,13 @@ class GamePlay:
                 for row in table.get_children():
                     table.delete(row)
 
-            #Lazy import the function reset
+            #Lazy import the classes Character and TopFramePacker and the function reset
+            from game import Character
+            from options import TopFramePacker
             from game.reset_attributes import reset
 
             #Reset the attributes
             reset()
-
-            #Lazy import the classes Character and TopFramePacker
-            from game import Character
-            from options import TopFramePacker
 
             #Update the labels displaying the points
             TopFramePacker.player_points.config(text = f"Current Points :\n{Character.player_handler.points}")
@@ -183,15 +197,13 @@ class GamePlay:
             self.text_object.config(state = "disabled")
 
         elif response in ["h", "home"]:
-            #Lazy import the class Chat, Tables and TopFramePacker
+            #Lazy import the class Chat, Tables and TopFramePacker and the function reset
             from game.conversation import Chat
             from options import Tables, TopFramePacker
+            from game.reset_attributes import reset
 
             #Reset the flag to True
             Chat.initial_response = True
-
-            ##Lazy import the function reset
-            from game.reset_attributes import reset
 
             #Reset the attributes
             reset()
