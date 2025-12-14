@@ -53,7 +53,7 @@ class TopFramePacker:
         TopFramePacker.player_points = player_points_label.label
 
         #Enable horizontal scrolling in top left frame
-        left_scroll_enabler = ScrollEnabler(canvas1, horizontal = True)
+        left_scroll_enabler = ScrollEnabler(canvas1)
         left_scroll_enabler.enable_scrolling()
 
         #Creating top mid frame
@@ -114,5 +114,5 @@ class TopFramePacker:
         canvas2.update_idletasks()
         
         #Enable horizontal scrolling in top right frame
-        right_scroll_enabler = ScrollEnabler(canvas2, horizontal = True)
+        right_scroll_enabler = ScrollEnabler(canvas2)
         right_scroll_enabler.enable_scrolling()
