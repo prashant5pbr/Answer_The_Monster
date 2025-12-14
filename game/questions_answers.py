@@ -4,7 +4,7 @@ import tkinter as tk
 from game.create_character import Character
 from game.timer import CountDown
 from game.all_questions import questions_data
-#Lazy import classes Gameplayy, TopFramePacker, BottomFramePacker and Tables
+#Lazy import classes Gameplay, TopFramePacker, BottomFramePacker and Tables
 
 #Class to insert questions and answers in the Text widget
 class Questioner:
@@ -15,6 +15,7 @@ class Questioner:
     current_answer = None
     answer_ready = False
     reset_questions = False
+    correct_questions = 0
 
     #Initialised the instance attribute with Text widget and Entry widget inside game layout's bottom frame
     def __init__(self):
@@ -122,6 +123,9 @@ class Questioner:
 
             #Update the tables
             Tables.manage(answer="correct")
+
+            #Update the number of correctly answered questions
+            Questioner.correct_questions += 1
 
             #Don't accept the answer after time is up
             Questioner.answer_ready = False
