@@ -1,5 +1,5 @@
 from widgets import LabelWidget, FrameWidget
-#Lazy imported class GameSetup
+#Lazy imported class GameSetup and ScoreBoard
 
 #Class to creat home screen
 class Home:
@@ -56,9 +56,14 @@ class Home:
         self.exit_option = LabelWidget(frame.frame, text = "Exit", font = ("Academy Engraved LET", 40), cursor = "hand2", 
                                        fg = "red", row = 3, column = 0, sticky = "w", padx = (375, 0))
         
-        #Lazy importing the GameSetup Class
+        #Lazy importing the GameSetup and ScoreBoard Class
         from options import GameSetup
+        from game import ScoreBoard
 
-        #Create GameSetup object and bind the given method to the label
+        #Create GameSetup object and bind the method to the label
         new_game_object = GameSetup(self.root)
         self.new_game_option.label.bind("<Button-1>", lambda event : new_game_object.ask_name())
+
+        #Create ScoreBoard object and bind the method to the label
+        score_object = ScoreBoard(self.root)
+        self.scores_option.label.bind("<Button-1>", lambda event: score_object.display_scores())
