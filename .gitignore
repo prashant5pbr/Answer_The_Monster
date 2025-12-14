@@ -1,4 +1,8 @@
-#__pycache__ files
+#Ignore actual game data and also the sample
+database/quiz_game.db
+database/sample_quiz_data.db
+
+#Ignore python cache files
 __pycache__/
 
 #virtual environment files
