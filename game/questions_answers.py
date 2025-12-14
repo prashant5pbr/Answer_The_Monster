@@ -15,7 +15,7 @@ class Questioner:
     current_answer = None
     answer_ready = False
     reset_questions = False
-    correct_questions = 0
+    correct_answers = 0
 
     #Initialised the instance attribute with Text widget and Entry widget inside game layout's bottom frame
     def __init__(self):
@@ -125,7 +125,7 @@ class Questioner:
             Tables.manage(answer="correct")
 
             #Update the number of correctly answered questions
-            Questioner.correct_questions += 1
+            Questioner.correct_answers += 1
 
             #Don't accept the answer after time is up
             Questioner.answer_ready = False
