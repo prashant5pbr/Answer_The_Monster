@@ -6,6 +6,7 @@ class Character:
     system_name = "Monster"
     system_points = 50
     player_handler = None
+    status = None
 
     #Initialising the player's name and initial points as instance attributes
     def __init__(self, name, points = 50):
@@ -32,16 +33,16 @@ class Character:
 
         #Check if system's point first became zero
         if Character.system_points == 0:
-            status = "win 💪"
+            Character.status = "win"
 
             #Create object and call method to insert last messages in the Text widget
             last_message_inserter = GamePlay(BottomFramePacker.text_handler, BottomFramePacker.entry_handler)
-            last_message_inserter.game_end(status)
+            last_message_inserter.game_end(Character.status)
 
         #Check if system's point first became zero
         elif Character.player_handler.points == 0:
-            status = "lose"
+            Character.status = "lose"
 
             #Create object and call method to insert last messages in the Text widget
             last_message_inserter = GamePlay(BottomFramePacker.text_handler, BottomFramePacker.entry_handler)
-            last_message_inserter.game_end(status)
+            last_message_inserter.game_end(Character.status)
