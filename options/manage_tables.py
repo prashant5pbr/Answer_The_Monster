@@ -20,8 +20,8 @@ class Tables:
 
         #Style configuration for the table and its heading
         style = ttk.Style()
-        style.configure("Treeview", rowheight = 35)
-        style.configure("Treeview.Heading", font = ("Helvetica", 15, "bold"))
+        style.configure("Treeview", rowheight = 35, font = ("Helvetica", 15), foreground = "white")
+        style.configure("Treeview.Heading", font = ("Helvetica", 15, "bold"), foreground = "white")
 
         #Create a table
         self.table = TreeViewWidget(self.frame, show = "headings", row = 0, column = 0, sticky = "nsew")
