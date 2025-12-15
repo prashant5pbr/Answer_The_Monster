@@ -1,5 +1,5 @@
 from widgets import FrameWidget, LabelWidget, CanvasWidget, EntryWidget
-from options.top_frame_widges import TopFramePacker
+from options.top_frame_widgets import TopFramePacker
 from options.bottom_frame_widgets import BottomFramePacker
 from options.name_setter import EnterName
 from home_screen import Home
