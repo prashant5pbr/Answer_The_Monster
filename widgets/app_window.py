@@ -1,4 +1,5 @@
 import tkinter as tk
+import paths
 
 #Class to create window
 class AppWindow:
@@ -16,6 +17,9 @@ class AppWindow:
         #Assign the Tk() object to the window handler
         AppWindow.main_window = self.root
 
+        #Set the logo
+        self.set_logo()
+
     #Setting the dimensions and title of the window
     def setup_window(self):
         self.root.minsize(self.width, self.height)
@@ -25,3 +29,7 @@ class AppWindow:
     def start(self):
         self.setup_window()
         self.root.mainloop()            #Start the main event loop to make window appear and make it able to interact
+
+    #Method to set the logo
+    def set_logo(self):
+        self.root.iconphoto(True, tk.PhotoImage(file = paths.LOGO_PATH))
