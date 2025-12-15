@@ -5,6 +5,10 @@ database/sample_quiz_data.db
 #Ignore python cache files
 __pycache__/
 
+#Ignore the logos
+atm_logo.png
+atm_logo.icns
+
 #virtual environment files
 venv/
 
