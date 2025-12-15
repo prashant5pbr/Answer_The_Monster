@@ -1,10 +1,11 @@
 # Answer The Monster
 
- Answer The Monster application is an interactive desktop quiz game that challenges players to answer questions within a time limit. The game features a clean, intuitive interface, real-time scoring, and persistent score tracking.
+ Answer The Monster application is an interactive desktop quiz game that challenges players to answer questions within a time limit. The game features a clean and intuitive chat format interface. It also has real-time scoring and persistent score tracking.
 
 ## Features
 
 - **Character Creation**: Create and name your own game character
+- **Chat Format Interface** : The questions are asked and answers recieved in chat format.
 - **Timed Gameplay**: 10-second countdown timer for each question
 - **Score Tracking**: Real-time score updates with point tracking
 - **Scores and Result Display**: View scores and game result for each game
